@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBLS — White Tiger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --white:#ffffff;--off:#f7f5f2;--cream:#ede9e3;--stroke:#d8d4cc;--stroke-md:#bfbab1;
+  --ink:#0f0f0d;--ink-mid:#4a4843;--ink-light:#9a9690;
+  --tiger:#c85a12;--tiger-lo:rgba(200,90,18,.09);--tiger-mid:rgba(200,90,18,.18);
+  --blue:#1a5fc4;--blue-lo:rgba(26,95,196,.09);
+  --danger:#c42020;--green:#16a34a;
+  --sidebar-w:320px;
+  --mono:'JetBrains Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+html,body{height:100%;font-family:var(--sans);background:var(--off);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:14px}
+.app{display:flex;height:100vh;overflow:hidden}
+
+aside{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--stroke);display:flex;flex-direction:column;height:100%;overflow:hidden}
+.sidebar-top{padding:20px 22px 16px;border-bottom:1px solid var(--stroke);flex-shrink:0}
+.tiger-bar{display:flex;gap:3px;margin-bottom:14px}
+.tiger-bar span{height:3px;border-radius:2px;background:var(--ink)}
+.tiger-bar span:nth-child(1){width:36px}.tiger-bar span:nth-child(2){width:10px}.tiger-bar span:nth-child(3){width:6px;background:var(--tiger)}
+.logo-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.logo-img{width:28px;height:28px;border-radius:6px;background:var(--tiger-lo);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.logo-img img{width:20px;height:20px;object-fit:contain}
+.sidebar-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light)}
+.sidebar-title{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.sidebar-sub{font-size:11px;font-weight:300;color:var(--ink-light);margin-top:2px}
+
+.sidebar-body{flex:1;overflow-y:auto;padding:4px 0 20px;scrollbar-width:thin;scrollbar-color:var(--cream) transparent}
+.sidebar-body::-webkit-scrollbar{width:3px}.sidebar-body::-webkit-scrollbar-thumb{background:var(--cream)}
+
+.sec{padding:14px 22px 2px}
+.sec-label{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--stroke)}
+
+.field-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;margin-bottom:10px;min-height:32px}
+.field-label{font-size:12px;font-weight:500;color:var(--ink-mid);line-height:1.3}
+.field-label small{display:block;font-size:10px;font-weight:400;color:var(--ink-light);font-family:var(--mono)}
+.field-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);text-align:right;white-space:nowrap}
+.field-controls{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:3px;background:var(--cream);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--ink);border:2.5px solid var(--white);box-shadow:0 0 0 1.5px var(--ink);cursor:pointer;transition:transform .1s,box-shadow .1s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 0 1.5px var(--tiger);background:var(--tiger)}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:2.5px solid var(--white);cursor:pointer}
+.num-in{width:62px;background:var(--off);border:1.5px solid var(--stroke);border-radius:5px;color:var(--ink);font-family:var(--mono);font-size:11px;font-weight:500;padding:4px 6px;text-align:right;outline:none;transition:border-color .15s;-moz-appearance:textfield}
+.num-in::-webkit-inner-spin-button,.num-in::-webkit-outer-spin-button{-webkit-appearance:none}
+.num-in:focus{border-color:var(--ink);background:var(--white)}
+.pm-btn{width:24px;height:24px;background:var(--white);border:1.5px solid var(--stroke);border-radius:4px;color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+.pm-btn:hover{border-color:var(--stroke-md);background:var(--off)}
+.pm-btn:active{background:var(--tiger);color:var(--white);border-color:var(--tiger)}
+
+.scale-buttons{display:flex;gap:5px;margin-bottom:4px}
+.scale-btn{flex:1;background:var(--white);border:1.5px solid var(--stroke);border-radius:5px;color:var(--ink);font-family:var(--mono);font-size:10px;font-weight:500;padding:4px 2px;text-align:center;cursor:pointer;transition:all .12s}
+.scale-btn:hover{border-color:var(--stroke-md)}
+.scale-btn.active{background:var(--tiger);color:var(--white);border-color:var(--tiger)}
+
+.ef-row{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.ef-label{font-size:12px;font-weight:500;color:var(--ink-mid);flex:1}
+.ef-tag{font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.ef-tag.pos{background:#fde8e4;color:var(--danger)}
+.ef-tag.neg{background:#dcfce7;color:var(--green)}
+.ef-tag.zero{background:var(--cream);color:var(--ink-light)}
+
+main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.main-bar{background:var(--white);border-bottom:1px solid var(--stroke);padding:11px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:12px}
+.bar-title{font-size:12px;font-weight:500;color:var(--ink-mid)}
+.bar-status{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--ink-light)}
+.bar-answer{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.bar-answer span{color:var(--blue)}
+.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:16px 20px;gap:12px}
+
+.cards-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex-shrink:0}
+.rcard{background:var(--white);border:1.5px solid var(--stroke);border-radius:12px;padding:18px 20px 14px;position:relative;overflow:hidden}
+.rcard.nom{border-color:var(--blue)}
+.rcard.nom::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue)}
+.rcard .wm{position:absolute;right:14px;top:8px;font-family:var(--mono);font-size:64px;font-weight:700;line-height:1;pointer-events:none;user-select:none;letter-spacing:-.04em}
+.rcard.nom .wm{color:var(--blue-lo)}
+.rbadge{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:8px}
+.rbadge.nom{background:var(--blue-lo);color:var(--blue)}
+.rangle{font-family:var(--mono);font-size:44px;font-weight:700;line-height:1;color:var(--ink);letter-spacing:-.03em;margin-bottom:4px}
+.rangle .unit{font-size:18px;font-weight:400;color:var(--ink-mid);margin-left:2px}
+.rband{font-size:11px;color:var(--ink-light);margin-bottom:12px;font-family:var(--mono)}
+.rband b{color:var(--ink-mid);font-weight:600}
+.rmetrics{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--stroke);padding-top:10px}
+.rm{padding:0 8px 0 0}
+.rm:not(:last-child){border-right:1px solid var(--stroke);margin-right:8px}
+.rm-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:3px}
+.rm-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink)}
+.rm-val.ok{color:var(--green)}.rm-val.warn{color:var(--danger)}
+.rm-unit{font-size:9px;font-weight:400;color:var(--ink-light);margin-left:1px}
+
+.alert-wrap{grid-column:1/-1}
+.alert-box{background:var(--white);border:1.5px solid #f5c0b8;border-radius:12px;padding:18px 20px;display:flex;gap:12px;align-items:flex-start}
+.alert-icon{width:30px;height:30px;border-radius:50%;background:#fde8e4;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);font-size:14px;font-weight:700;color:var(--danger)}
+.alert-body h4{font-size:13px;font-weight:600;color:#8b1a1a;margin-bottom:4px}
+.alert-body p{font-size:12px;color:#b02020;line-height:1.6}
+.rcard-empty{background:transparent;border:1.5px dashed var(--stroke);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--ink-light);font-family:var(--mono);font-size:11px;min-height:140px}
+
+.canvas-wrap{flex:1;background:var(--white);border:1.5px solid var(--stroke);border-radius:12px;overflow:hidden;position:relative;min-height:0}
+.canvas-topbar{position:absolute;top:0;left:0;right:0;padding:9px 16px;display:flex;align-items:center;gap:14px;z-index:2;pointer-events:none;background:linear-gradient(to bottom,rgba(255,255,255,.96) 60%,transparent)}
+.ctb-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light)}
+.leg{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--ink-mid)}
+.leg-line{width:14px;height:2.5px;border-radius:2px;flex-shrink:0}
+.leg-band{width:14px;height:9px;border-radius:2px;flex-shrink:0}
+canvas#traj{display:block;width:100%;height:100%}
+
+.divider{height:1px;background:var(--stroke);margin:10px 22px 4px}
+
+@media(max-width:900px){:root{--sidebar-w:270px}}
+@media(max-width:680px){
+  .app{flex-direction:column}
+  aside{width:100%;min-width:unset;max-height:55vh;border-right:none;border-bottom:1px solid var(--stroke)}
+  .cards-row{grid-template-columns:1fr}
+  .main-content{padding:10px;gap:10px}
+  .rangle{font-size:36px}
+  .rmetrics{grid-template-columns:repeat(2,1fr);gap:8px}
+  .rm{border-right:none!important;margin-right:0!important}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<aside>
+  <div class="sidebar-top">
+    <div class="tiger-bar"><span></span><span></span><span></span></div>
+    <div class="logo-row">
+      <div class="logo-img">
+        <img src="https://cdn-icons-png.flaticon.com/512/15057/15057719.png" alt="tiger" onerror="this.parentElement.innerHTML='🐯'">
+      </div>
+      <div>
+        <div class="sidebar-eyebrow">SBLS · White Tiger</div>
+        <div class="sidebar-title">Spring Launcher</div>
+      </div>
+    </div>
+    <div class="sidebar-sub">Inverse Kinematics Simulator</div>
+  </div>
+  <div class="sidebar-body">
+
+    <div class="sec">
+      <div class="sec-label">Step size</div>
+      <div class="scale-buttons">
+        <button class="scale-btn" data-step="10">10</button>
+        <button class="scale-btn" data-step="1">1</button>
+        <button class="scale-btn" data-step="0.1">0.1</button>
+        <button class="scale-btn" data-step="0.01">0.01</button>
+        <button class="scale-btn" data-step="0.001">0.001</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec">
+      <div class="sec-label">Geometry</div>
+
+      <div class="field-row">
+        <div class="field-label">Target distance<small>d</small></div>
+        <div class="field-val" id="d-dv">5.00 m</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="d" data-dir="-1">−</button>
+        <input type="range" id="d-s" min="10" max="150" step="1" value="50">
+        <input type="number" class="num-in" id="d-n" min="1.0" max="15.0" step="0.1" value="5.00">
+        <button class="pm-btn" data-field="d" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Pivot height<small>h</small></div>
+        <div class="field-val" id="h-dv">1.00 m</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="h" data-dir="-1">−</button>
+        <input type="range" id="h-s" min="10" max="200" step="5" value="100">
+        <input type="number" class="num-in" id="h-n" min="0.10" max="2.00" step="0.05" value="1.00">
+        <button class="pm-btn" data-field="h" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Target height (fixed)<small>TARGET_H</small></div>
+        <div class="field-val">430 mm</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Opening ⌀<small>D_o</small></div>
+        <div class="field-val" id="D_o-dv">120 mm</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="D_o" data-dir="-1">−</button>
+        <input type="range" id="D_o-s" min="50" max="300" step="5" value="120">
+        <input type="number" class="num-in" id="D_o-n" min="50" max="300" step="5" value="120">
+        <button class="pm-btn" data-field="D_o" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Ball ⌀<small>D_b</small></div>
+        <div class="field-val" id="D_b-dv">40 mm</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="D_b" data-dir="-1">−</button>
+        <input type="range" id="D_b-s" min="10" max="150" step="1" value="40">
+        <input type="number" class="num-in" id="D_b-n" min="10" max="150" step="1" value="40">
+        <button class="pm-btn" data-field="D_b" data-dir="1">+</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec">
+      <div class="sec-label">Spring</div>
+
+      <div class="field-row">
+        <div class="field-label">Spring constant<small>k</small></div>
+        <div class="field-val" id="k-dv">800 N/m</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="k" data-dir="-1">−</button>
+        <input type="range" id="k-s" min="100" max="3000" step="50" value="800">
+        <input type="number" class="num-in" id="k-n" min="100" max="3000" step="50" value="800">
+        <button class="pm-btn" data-field="k" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Compression<small>x</small></div>
+        <div class="field-val" id="x-dv">0.08 m</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="x" data-dir="-1">−</button>
+        <input type="range" id="x-s" min="1" max="20" step="1" value="8">
+        <input type="number" class="num-in" id="x-n" min="0.01" max="0.20" step="0.01" value="0.08">
+        <button class="pm-btn" data-field="x" data-dir="1">+</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec">
+      <div class="sec-label">Collision</div>
+
+      <div class="field-row">
+        <div class="field-label">Plunger mass<small>M</small></div>
+        <div class="field-val" id="M-dv">300 g</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="M" data-dir="-1">−</button>
+        <input type="range" id="M-s" min="50" max="2000" step="10" value="300">
+        <input type="number" class="num-in" id="M-n" min="50" max="2000" step="10" value="300">
+        <button class="pm-btn" data-field="M" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Ball mass<small>m</small></div>
+        <div class="field-val" id="m-dv">24 g</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="m" data-dir="-1">−</button>
+        <input type="range" id="m-s" min="5" max="500" step="1" value="24">
+        <input type="number" class="num-in" id="m-n" min="5" max="500" step="1" value="24">
+        <button class="pm-btn" data-field="m" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Restitution<small>e</small></div>
+        <div class="field-val" id="e-dv">0.45</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="e" data-dir="-1">−</button>
+        <input type="range" id="e-s" min="0" max="100" step="5" value="45">
+        <input type="number" class="num-in" id="e-n" min="0.00" max="1.00" step="0.05" value="0.45">
+        <button class="pm-btn" data-field="e" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Band width (±%)<small>e_f symmetric</small></div>
+        <div class="field-val" id="e_f-dv">5.0%</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="e_f" data-dir="-1">−</button>
+        <input type="range" id="e_f-s" min="0" max="20" step="1" value="5">
+        <input type="number" class="num-in" id="e_f-n" min="0.0" max="20.0" step="0.5" value="5.0">
+        <button class="pm-btn" data-field="e_f" data-dir="1">+</button>
+      </div>
+
+      <div class="ef-row">
+        <div class="ef-label" style="display:flex;align-items:center;gap:6px">
+          Error factor
+          <span style="font-family:var(--mono);font-size:9px;color:var(--ink-light);background:var(--cream);padding:1px 5px;border-radius:3px">ef_mult</span>
+        </div>
+        <div id="ef_mult-tag" class="ef-tag zero">×1.00</div>
+      </div>
+      <div class="field-controls" style="align-items:center;gap:6px">
+        <button class="pm-btn" data-field="ef_mult" data-dir="-1">−</button>
+        <input type="range" id="ef_mult-s" min="-50" max="50" step="1" value="0" style="flex:1">
+        <input type="number" class="num-in" id="ef_mult-n" min="-2.00" max="2.00" step="0.05" value="0.00" style="width:68px">
+        <button class="pm-btn" data-field="ef_mult" data-dir="1">+</button>
+      </div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--ink-light);margin-bottom:10px;padding:0 2px">
+        ±คูณ error จากสภาพจริง: ลม / แรงเสียดทาน / bounce
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec">
+      <div class="sec-label">Constraints</div>
+
+      <div class="field-row">
+        <div class="field-label">Min descent angle ↓<small>ang_min</small></div>
+        <div class="field-val" id="ang_min-dv">30.0°</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="ang_min" data-dir="-1">−</button>
+        <input type="range" id="ang_min-s" min="0" max="80" step="1" value="30">
+        <input type="number" class="num-in" id="ang_min-n" min="0" max="80" step="1" value="30.0">
+        <button class="pm-btn" data-field="ang_min" data-dir="1">+</button>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<main>
+  <div class="main-bar">
+    <span class="bar-title">Trajectory Analysis</span>
+    <div class="bar-status"><span class="dot"></span><span id="status-txt">Calculating…</span></div>
+    <div class="bar-answer">θ = <span id="calc-angle">--</span></div>
+  </div>
+
+  <div class="main-content">
+    <div class="cards-row" id="results-row"></div>
+    <div class="canvas-wrap">
+      <div class="canvas-topbar">
+        <span class="ctb-label">Trajectory</span>
+        <span class="leg"><span class="leg-line" style="background:#1a5fc4"></span>Nominal</span>
+        <span class="leg"><span class="leg-band" style="background:#1a5fc4;opacity:.2"></span>Band</span>
+        <span class="leg"><span class="leg-line" style="background:#c85a12;height:3px"></span>Shifted</span>
+        <span class="leg"><span class="leg-line" style="background:#c42020;height:4px"></span>Target</span>
+      </div>
+      <canvas id="traj"></canvas>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+'use strict';
+const G=9.81, TARGET_H=0.43, STORAGE='sbls-wt-v4';
+
+const defs={
+  d:{s:'d-s',n:'d-n',dv:'d-dv',fmt:v=>v.toFixed(2)+' m',sv:v=>v/10,vs:v=>Math.round(v*10),nmGet:v=>v.toFixed(2),nmSet:v=>v},
+  h:{s:'h-s',n:'h-n',dv:'h-dv',fmt:v=>v.toFixed(2)+' m',sv:v=>v/100,vs:v=>Math.round(v*100),nmGet:v=>v.toFixed(2),nmSet:v=>v},
+  k:{s:'k-s',n:'k-n',dv:'k-dv',fmt:v=>v.toFixed(0)+' N/m',sv:v=>+v,vs:v=>v,nmGet:v=>v.toFixed(0),nmSet:v=>v},
+  x:{s:'x-s',n:'x-n',dv:'x-dv',fmt:v=>v.toFixed(2)+' m',sv:v=>v/100,vs:v=>Math.round(v*100),nmGet:v=>v.toFixed(2),nmSet:v=>v},
+  M:{s:'M-s',n:'M-n',dv:'M-dv',fmt:v=>(v*1e3).toFixed(0)+' g',sv:v=>v/1e3,vs:v=>Math.round(v*1e3),nmGet:v=>(v*1e3).toFixed(0),nmSet:v=>v/1e3},
+  m:{s:'m-s',n:'m-n',dv:'m-dv',fmt:v=>(v*1e3).toFixed(0)+' g',sv:v=>v/1e3,vs:v=>Math.round(v*1e3),nmGet:v=>(v*1e3).toFixed(0),nmSet:v=>v/1e3},
+  e:{s:'e-s',n:'e-n',dv:'e-dv',fmt:v=>v.toFixed(2),sv:v=>v/100,vs:v=>Math.round(v*100),nmGet:v=>v.toFixed(2),nmSet:v=>v},
+  e_f:{s:'e_f-s',n:'e_f-n',dv:'e_f-dv',fmt:v=>(v*100).toFixed(1)+'%',sv:v=>v/100,vs:v=>Math.round(v*100),nmGet:v=>(v*100).toFixed(1),nmSet:v=>v/100},
+  D_o:{s:'D_o-s',n:'D_o-n',dv:'D_o-dv',fmt:v=>(v*1e3).toFixed(0)+' mm',sv:v=>v/1e3,vs:v=>Math.round(v*1e3),nmGet:v=>(v*1e3).toFixed(0),nmSet:v=>v/1e3},
+  D_b:{s:'D_b-s',n:'D_b-n',dv:'D_b-dv',fmt:v=>(v*1e3).toFixed(0)+' mm',sv:v=>v/1e3,vs:v=>Math.round(v*1e3),nmGet:v=>(v*1e3).toFixed(0),nmSet:v=>v/1e3},
+  ang_min:{s:'ang_min-s',n:'ang_min-n',dv:'ang_min-dv',fmt:v=>v.toFixed(1)+'°',sv:v=>+v,vs:v=>v,nmGet:v=>v.toFixed(1),nmSet:v=>v},
+  ef_mult:{s:'ef_mult-s',n:'ef_mult-n',dv:null,
+    fmt:v=>v>=0?'×'+(1+v).toFixed(2):'×'+(1+v).toFixed(2),
+    sv:v=>v/100,vs:v=>Math.round(v*100),
+    nmGet:v=>v.toFixed(2),nmSet:v=>v}
+};
+
+function gv(){const r={};for(const[k,d]of Object.entries(defs))r[k]=d.sv(+document.getElementById(d.s).value);return r;}
+
+function updateEfTag(param){
+  const tag=document.getElementById('ef_mult-tag');
+  if(!tag)return;
+  const mult=1+param;
+  tag.textContent='×'+mult.toFixed(2);
+  tag.className='ef-tag '+(param>0.001?'pos':param<-0.001?'neg':'zero');
+}
+
+// ─── FIX: calcShot now always returns the DESCENDING crossing ───────────────
+// We solve y(t) = TARGET_H and pick the root where vy < 0 (ball falling).
+// If launch is BELOW TARGET_H we allow the only positive root (ascending cross
+// won't exist, only the descending one will).
+function calcShot(deg, p){
+  const th = deg * Math.PI / 180;
+  const {k, x, M, m, e, h} = p;
+
+  // Spring energy → plunger speed
+  const KE = 0.5 * k * x * x - M * G * x * Math.sin(th);
+  if(KE <= 0) return null;
+
+  const vp = Math.sqrt(2 * KE / M);
+  // Inelastic collision: plunger hits ball
+  const vb = M * (1 + e) * vp / (M + m);
+
+  const ux = vb * Math.cos(th);
+  const uy = vb * Math.sin(th);
+
+  // Solve y(t) = h + uy*t - 0.5*G*t² = TARGET_H
+  // 0.5*G*t² - uy*t + (TARGET_H - h) = 0
+  const a_ = 0.5 * G;
+  const b_ = -uy;
+  const c_ = TARGET_H - h;          // NOTE: corrected sign vs. original
+  const disc = b_*b_ - 4*a_*c_;
+  if(disc < 0) return null;
+
+  const sqrtDisc = Math.sqrt(disc);
+  const t1 = (-b_ - sqrtDisc) / (2 * a_);
+  const t2 = (-b_ + sqrtDisc) / (2 * a_);
+
+  // vy at each root
+  const vy1 = uy - G * t1;
+  const vy2 = uy - G * t2;
+
+  // Prefer the root where ball is DESCENDING (vy < 0) and t > 0
+  let tFinal = null;
+  if(t2 > 1e-9 && vy2 <= 0) {
+    tFinal = t2;                     // almost always the correct one
+  } else if(t1 > 1e-9 && vy1 <= 0) {
+    tFinal = t1;
+  } else {
+    // Launch is below TARGET_H: ball crosses on the way up — accept the
+    // positive root even if vy > 0 (no descending crossing exists)
+    const candidates = [t1, t2].filter(t => t > 1e-9);
+    if(!candidates.length) return null;
+    tFinal = Math.max(...candidates);
+  }
+
+  const xAtTarget = ux * tFinal;
+  const vy_at     = uy - G * tFinal;
+  const descentDeg = Math.atan2(-vy_at, ux) * 180 / Math.PI;
+
+  // Time of flight to ground (y=0) — for display only
+  const tof = (uy + Math.sqrt(uy*uy + 2*G*h)) / G;
+
+  // Peak
+  const tp   = uy / G;
+  const ymax = tp > 0 ? h + uy*tp - 0.5*G*tp*tp : h;
+
+  return {xAtTarget, descentDeg, vb, tof, ymax,
+          ux, uy, x0:0, y0:h, tTarget:tFinal, vy_at};
+}
+
+function findAngle(targetDist, p){
+  let prev = null;
+  for(let i = 1; i <= 895; i++){
+    const deg  = i * 0.1;
+    const shot = calcShot(deg, p);
+    if(!shot){ prev = null; continue; }
+    if(prev !== null){
+      const dA = prev.xAtTarget - targetDist;
+      const dB = shot.xAtTarget - targetDist;
+      if(dA * dB <= 0){
+        const sol = Math.abs(dB) <= Math.abs(dA)
+          ? {theta:deg,  ...shot}
+          : {theta:deg-0.1, ...prev};
+        if(sol.descentDeg >= p.ang_min) return sol;
+      }
+    }
+    prev = shot; prev._deg = deg;
+  }
+  return null;
+}
+
+// ─── FIX: pathPoints draws the full smooth arc from launch → tTarget ────────
+// Steps are uniform in time so the curve is always smooth regardless of
+// where the peak is relative to the canvas clip region.
+function pathPoints(theta, p, steps=300){
+  const shot = calcShot(theta, p);
+  if(!shot) return [];
+
+  const {ux, uy, y0, tTarget} = shot;
+  const pts = [];
+
+  for(let i = 0; i <= steps; i++){
+    const t  = (i / steps) * tTarget;
+    const px = ux * t;
+    const py = y0 + uy * t - 0.5 * G * t * t;
+    pts.push({x: px, y: py});
+  }
+  // Snap last point exactly to target height
+  pts[pts.length - 1] = {x: shot.xAtTarget, y: TARGET_H};
+  return pts;
+}
+
+function saveStorage(){
+  try{
+    const r={};
+    for(const[k,d]of Object.entries(defs)){
+      const sl=document.getElementById(d.s);
+      if(sl) r[k]=sl.value;
+    }
+    localStorage.setItem(STORAGE,JSON.stringify(r));
+  }catch(_){}
+}
+
+function loadStorage(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(STORAGE)||'null');
+    if(!raw) return;
+    for(const[k,d]of Object.entries(defs)){
+      if(raw[k]==null) continue;
+      const sl=document.getElementById(d.s);
+      const nm=document.getElementById(d.n);
+      if(!sl||!nm) continue;
+      sl.value=raw[k];
+      const param=d.sv(+raw[k]);
+      nm.value=d.nmGet(param);
+      if(d.dv){const dv=document.getElementById(d.dv);if(dv)dv.textContent=d.fmt(param);}
+      if(k==='ef_mult') updateEfTag(param);
+    }
+  }catch(_){}
+}
+
+function renderResults(solNom, solMin, solMax, solShift, p){
+  const row      = document.getElementById('results-row');
+  const statusEl = document.getElementById('status-txt');
+  const angleEl  = document.getElementById('calc-angle');
+  const Esp = 0.5 * p.k * p.x * p.x;
+
+  if(p.D_b >= p.D_o){
+    angleEl.textContent='--'; statusEl.textContent='Ball too large';
+    row.innerHTML=`<div class="alert-wrap"><div class="alert-box"><div class="alert-icon">!</div><div class="alert-body"><h4>ลูกใหญ่กว่าช่องเปิด</h4><p>⌀ลูก <b>${(p.D_b*1e3).toFixed(0)} mm</b> ≥ ⌀ช่อง <b>${(p.D_o*1e3).toFixed(0)} mm</b></p></div></div></div>`;
+    return;
+  }
+  if(!solNom){
+    angleEl.textContent='--'; statusEl.textContent='No solution';
+    row.innerHTML=`<div class="alert-wrap"><div class="alert-box"><div class="alert-icon">!</div><div class="alert-body"><h4>ไม่พบมุมยิงที่เหมาะสม</h4><p>E<sub>spring</sub> ${Esp.toFixed(3)} J ไม่เพียงพอ หรือ descent &lt; ${p.ang_min.toFixed(1)}°<br>ลอง ↑ k · ↑ x · ↑ h · ↓ ระยะ</p></div></div></div>`;
+    return;
+  }
+
+  angleEl.textContent = solNom.theta.toFixed(1)+'°';
+  const ef_disp = p.ef_mult!==0 ? ` · ef×${(1+p.ef_mult).toFixed(2)}` : '';
+  statusEl.textContent = `θ=${solNom.theta.toFixed(1)}° · descent ${solNom.descentDeg.toFixed(1)}°${ef_disp}`;
+
+  const hMin=!!solMin, hMax=!!solMax;
+  let bandStr = hMin&&hMax
+    ? `${solMin.theta.toFixed(1)}° — ${solMax.theta.toFixed(1)}°`
+    : hMin ? `≥ ${solMin.theta.toFixed(1)}°`
+    : hMax ? `≤ ${solMax.theta.toFixed(1)}°`
+    : `${solNom.theta.toFixed(1)}° (±0)`;
+  const descOk = solNom.descentDeg >= p.ang_min;
+
+  row.innerHTML=`
+  <div class="rcard nom">
+    <div class="wm">${solNom.theta.toFixed(0)}°</div>
+    <div class="rbadge nom">Launch Angle</div>
+    <div class="rangle">${solNom.theta.toFixed(1)}<span class="unit">°</span></div>
+    <div class="rband">Band <b>${bandStr}</b> &nbsp;(±${(p.e_f*100).toFixed(1)}%)</div>
+    <div class="rmetrics">
+      <div class="rm"><div class="rm-lbl">Ball v₀</div><div class="rm-val">${solNom.vb.toFixed(2)}<span class="rm-unit">m/s</span></div></div>
+      <div class="rm"><div class="rm-lbl">Air time</div><div class="rm-val">${solNom.tof.toFixed(3)}<span class="rm-unit">s</span></div></div>
+      <div class="rm"><div class="rm-lbl">Peak h</div><div class="rm-val">${solNom.ymax.toFixed(2)}<span class="rm-unit">m</span></div></div>
+      <div class="rm"><div class="rm-lbl">Descent</div><div class="rm-val ${descOk?'ok':'warn'}">${solNom.descentDeg.toFixed(1)}<span class="rm-unit">°</span></div></div>
+    </div>
+  </div>
+  <div class="rcard-empty" style="flex-direction:column;gap:6px;color:var(--ink-mid);">
+    <span style="font-size:30px;font-family:var(--mono);font-weight:700;color:var(--ink)">${solNom.theta.toFixed(1)}°</span>
+    ${solShift&&p.ef_mult!==0?`<span style="font-family:var(--mono);font-size:13px;color:var(--tiger)">ef→ ${solShift.theta.toFixed(1)}°</span>`:''}
+    <span style="font-size:11px">ตั้งที่หน้างาน</span>
+    <span style="font-size:10px;color:var(--ink-light)">E = ${Esp.toFixed(3)} J &nbsp;|&nbsp; gap ${((p.D_o-p.D_b)*1e3).toFixed(0)} mm</span>
+    ${p.ef_mult!==0?`<span style="font-size:9px;font-family:var(--mono);background:var(--tiger-lo);color:var(--tiger);padding:2px 8px;border-radius:3px">ef_mult ×${(1+p.ef_mult).toFixed(2)}</span>`:''}
+  </div>`;
+}
+
+function drawTraj(solNom, solMin, solMax, solShift, p){
+  const cv   = document.getElementById('traj');
+  const wrap = cv.parentElement;
+  const W    = wrap.clientWidth;
+  const H    = wrap.clientHeight;
+  cv.width   = W * devicePixelRatio;
+  cv.height  = H * devicePixelRatio;
+  cv.style.width  = W + 'px';
+  cv.style.height = H + 'px';
+  const ctx = cv.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = {l:52, r:24, t:48, b:38};
+  const pw = W - pad.l - pad.r;
+  const ph = H - pad.t - pad.b;
+  if(pw <= 0 || ph <= 0) return;
+
+  function peakOf(sol){
+    if(!sol) return 0;
+    const tp = sol.uy / G;
+    return tp > 0 ? sol.y0 + sol.uy*tp - 0.5*G*tp*tp : sol.y0;
+  }
+
+  let maxX = Math.max(p.d * 1.35, 3);
+  let maxY = Math.max(p.h * 1.4, TARGET_H * 1.5, 1);
+  [solNom, solMin, solMax, solShift].forEach(s=>{
+    if(s) maxY = Math.max(maxY, peakOf(s) * 1.18);
+  });
+  maxY = Math.max(maxY, p.h * 1.15);
+
+  const toX = rx => pad.l + (rx / maxX) * pw;
+  const toY = ry => pad.t + ph - (ry / maxY) * ph;
+
+  // Grid
+  ctx.strokeStyle='#f0ede8'; ctx.lineWidth=1;
+  for(let i=0;i<=6;i++){const cx=pad.l+pw*i/6;ctx.beginPath();ctx.moveTo(cx,pad.t);ctx.lineTo(cx,pad.t+ph);ctx.stroke();}
+  for(let i=0;i<=4;i++){const cy=pad.t+ph*i/4;ctx.beginPath();ctx.moveTo(pad.l,cy);ctx.lineTo(pad.l+pw,cy);ctx.stroke();}
+
+  ctx.strokeStyle='#d8d4cc'; ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ph);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t+ph);ctx.lineTo(pad.l+pw,pad.t+ph);ctx.stroke();
+
+  ctx.fillStyle='#b0aca4'; ctx.font='9px "JetBrains Mono",monospace'; ctx.textAlign='center';
+  for(let i=0;i<=6;i++) ctx.fillText((maxX*i/6).toFixed(1)+'m', pad.l+pw*i/6, pad.t+ph+20);
+  ctx.textAlign='right';
+  for(let i=0;i<=4;i++) ctx.fillText((maxY*(4-i)/4).toFixed(1), pad.l-7, pad.t+ph*i/4+3);
+
+  // Ground line
+  ctx.strokeStyle='#c8c4bc'; ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad.l,toY(0));ctx.lineTo(pad.l+pw,toY(0));ctx.stroke();
+
+  // Target opening
+  const scale_ppx = pw / maxX;
+  const txPx = toX(p.d), tyPx = toY(TARGET_H);
+  const openPx = p.D_o * scale_ppx, ballPx = p.D_b * scale_ppx;
+
+  ctx.save();ctx.setLineDash([5,5]);ctx.strokeStyle='#c42020';ctx.lineWidth=1;ctx.globalAlpha=.2;
+  ctx.beginPath();ctx.moveTo(txPx,pad.t);ctx.lineTo(txPx,pad.t+ph);ctx.stroke();ctx.restore();
+  ctx.save();ctx.strokeStyle='#c42020';ctx.lineWidth=5;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(txPx-openPx/2,tyPx);ctx.lineTo(txPx+openPx/2,tyPx);ctx.stroke();
+  ctx.lineWidth=2;ctx.globalAlpha=.5;
+  ctx.beginPath();
+  ctx.moveTo(txPx-openPx/2,tyPx);ctx.lineTo(txPx-openPx/2,tyPx+18);
+  ctx.moveTo(txPx+openPx/2,tyPx);ctx.lineTo(txPx+openPx/2,tyPx+18);
+  ctx.stroke();ctx.restore();
+  ctx.fillStyle='#c42020';ctx.font='9px "JetBrains Mono",monospace';ctx.textAlign='center';
+  ctx.fillText(`${p.d.toFixed(1)}m  ⌀${(p.D_o*1e3).toFixed(0)}mm`, txPx, pad.t+ph+20);
+
+  // Pivot post
+  ctx.strokeStyle='#c8c4bc';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad.l,toY(0));ctx.lineTo(pad.l,toY(p.h));ctx.stroke();
+  ctx.fillStyle='#9a9690';ctx.beginPath();ctx.arc(pad.l,toY(p.h),5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(pad.l,toY(p.h),2,0,Math.PI*2);ctx.fill();
+
+  if(!solNom) return;
+
+  // ── Clip to plot area ──────────────────────────────────────────────────────
+  ctx.save();
+  ctx.beginPath();ctx.rect(pad.l-1, pad.t-1, pw+2, ph+2);ctx.clip();
+
+  const pMin   = solMin   ? pathPoints(solMin.theta,   p) : null;
+  const pMax   = solMax   ? pathPoints(solMax.theta,   p) : null;
+  const pNom   = pathPoints(solNom.theta, p);
+  const pShift = (solShift && p.ef_mult !== 0) ? pathPoints(solShift.theta, p) : null;
+
+  // Band fill
+  if(pMin && pMax){
+    ctx.save();ctx.beginPath();
+    pMin.forEach((pt,i)=>i===0?ctx.moveTo(toX(pt.x),toY(pt.y)):ctx.lineTo(toX(pt.x),toY(pt.y)));
+    ctx.lineTo(toX(pMax[pMax.length-1].x), toY(pMax[pMax.length-1].y));
+    for(let i=pMax.length-2;i>=0;i--) ctx.lineTo(toX(pMax[i].x),toY(pMax[i].y));
+    ctx.closePath();ctx.fillStyle='rgba(26,95,196,0.10)';ctx.fill();ctx.restore();
+
+    [pMin, pMax].forEach(pts=>{
+      ctx.save();ctx.strokeStyle='#1a5fc4';ctx.lineWidth=1;ctx.globalAlpha=.18;ctx.setLineDash([4,4]);
+      ctx.beginPath();pts.forEach((pt,i)=>i===0?ctx.moveTo(toX(pt.x),toY(pt.y)):ctx.lineTo(toX(pt.x),toY(pt.y)));
+      ctx.stroke();ctx.restore();
+    });
+  }
+
+  // Shifted arc
+  if(pShift){
+    ctx.save();ctx.strokeStyle='#c85a12';ctx.lineWidth=2;ctx.lineJoin='round';ctx.setLineDash([6,4]);ctx.globalAlpha=.8;
+    ctx.beginPath();pShift.forEach((pt,i)=>i===0?ctx.moveTo(toX(pt.x),toY(pt.y)):ctx.lineTo(toX(pt.x),toY(pt.y)));
+    ctx.stroke();ctx.restore();
+    ctx.fillStyle='#c85a12';ctx.strokeStyle='#fff';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(toX(pShift[pShift.length-1].x),toY(pShift[pShift.length-1].y),3.5,0,Math.PI*2);ctx.fill();ctx.stroke();
+  }
+
+  // Nominal arc
+  ctx.save();ctx.strokeStyle='#1a5fc4';ctx.lineWidth=2.5;ctx.lineJoin='round';
+  ctx.beginPath();pNom.forEach((pt,i)=>i===0?ctx.moveTo(toX(pt.x),toY(pt.y)):ctx.lineTo(toX(pt.x),toY(pt.y)));
+  ctx.stroke();ctx.restore();
+
+  ctx.restore(); // end clip
+
+  // Angle arc annotation
+  const lx = pad.l, ly = toY(p.h);
+  ctx.save();ctx.setLineDash([4,5]);ctx.strokeStyle='#1a5fc4';ctx.lineWidth=1.5;ctx.globalAlpha=.35;
+  ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(toX(solNom.x0),toY(solNom.y0));ctx.stroke();ctx.restore();
+
+  const th = solNom.theta * Math.PI / 180;
+  ctx.save();ctx.strokeStyle='#1a5fc4';ctx.lineWidth=1.5;ctx.globalAlpha=.25;
+  ctx.beginPath();ctx.arc(lx,ly,26,-th,0);ctx.stroke();ctx.restore();
+  const midA = -th/2;
+  ctx.fillStyle='#1a5fc4';ctx.font='bold 10px "JetBrains Mono",monospace';ctx.textAlign='left';
+  ctx.fillText(solNom.theta.toFixed(1)+'°', lx+32*Math.cos(midA)+2, ly-32*Math.sin(midA)+4);
+
+  // Launch dot
+  ctx.fillStyle='#1a5fc4';ctx.strokeStyle='#fff';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(toX(solNom.x0),toY(solNom.y0),5,0,Math.PI*2);ctx.fill();ctx.stroke();
+
+  // Peak dot
+  const tp = solNom.uy / G;
+  if(tp > 0){
+    ctx.fillStyle='#1a5fc4';ctx.globalAlpha=.3;
+    ctx.beginPath();ctx.arc(toX(solNom.x0+solNom.ux*tp),toY(solNom.ymax),4,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+  }
+
+  // Descent arrow at target
+  const ax = toX(solNom.xAtTarget), ay = toY(TARGET_H);
+  const spd = Math.sqrt(solNom.ux*solNom.ux + solNom.vy_at*solNom.vy_at);
+  const arrowLen = 30;
+  const dxN = solNom.ux / spd, dyN = -solNom.vy_at / spd;
+  const bx = ax - dxN*arrowLen, by = ay - dyN*arrowLen;
+  ctx.save();ctx.strokeStyle='#c85a12';ctx.lineWidth=2;ctx.globalAlpha=.9;
+  ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(ax,ay);ctx.stroke();
+  const ang = Math.atan2(ay-by, ax-bx);
+  ctx.fillStyle='#c85a12';
+  ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax-8*Math.cos(ang-0.38),ay-8*Math.sin(ang-0.38));ctx.lineTo(ax-8*Math.cos(ang+0.38),ay-8*Math.sin(ang+0.38));ctx.closePath();ctx.fill();
+  ctx.font='bold 9px "JetBrains Mono",monospace';ctx.textAlign='right';
+  ctx.fillText(solNom.descentDeg.toFixed(1)+'° ↓', ax-3, by-4);
+  ctx.restore();
+
+  // Ball outline at target
+  if(ballPx > 3){
+    ctx.save();ctx.globalAlpha=.18;ctx.strokeStyle='#1a5fc4';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(ax, ay-ballPx/2, ballPx/2, 0, Math.PI*2);ctx.stroke();ctx.restore();
+  }
+  ctx.fillStyle='#1a5fc4';ctx.strokeStyle='#fff';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(ax,ay,4,0,Math.PI*2);ctx.fill();ctx.stroke();
+}
+
+function calculate(){
+  const p = gv();
+  saveStorage();
+  const delta  = p.d * p.e_f;
+  const dMin   = Math.max(0.1, p.d - delta);
+  const dMax   = p.d + delta;
+  const dShift = p.d * (1 + p.ef_mult);
+  const solNom   = findAngle(p.d,   p);
+  const solMin   = findAngle(dMin,  p);
+  const solMax   = findAngle(dMax,  p);
+  const solShift = p.ef_mult !== 0 ? findAngle(Math.max(0.1, dShift), p) : null;
+  renderResults(solNom, solMin, solMax, solShift, p);
+  drawTraj(solNom, solMin, solMax, solShift, p);
+}
+
+// Wire up all controls
+for(const[key,d] of Object.entries(defs)){
+  const sl = document.getElementById(d.s);
+  const nm = document.getElementById(d.n);
+  if(!sl||!nm) continue;
+  sl.addEventListener('input', ()=>{
+    const param = d.sv(+sl.value);
+    nm.value = d.nmGet(param);
+    if(d.dv){const dv=document.getElementById(d.dv);if(dv)dv.textContent=d.fmt(param);}
+    if(key==='ef_mult') updateEfTag(param);
+    calculate();
+  });
+  nm.addEventListener('input', ()=>{
+    const raw = nm.value;
+    if(raw===''||isNaN(+raw)) return;
+    const param = d.nmSet(+raw);
+    sl.value = d.vs(param);
+    if(d.dv){const dv=document.getElementById(d.dv);if(dv)dv.textContent=d.fmt(param);}
+    if(key==='ef_mult') updateEfTag(param);
+    calculate();
+  });
+}
+
+// Step-size buttons
+const scaleBtns = document.querySelectorAll('.scale-btn');
+let currentStep = 0.1;
+scaleBtns.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    scaleBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentStep = parseFloat(btn.dataset.step);
+  });
+});
+document.querySelector('.scale-btn[data-step="0.1"]').classList.add('active');
+
+// ± buttons
+document.querySelectorAll('.pm-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const field = btn.dataset.field;
+    const dir   = +btn.dataset.dir;
+    const d     = defs[field];
+    const sl    = document.getElementById(d.s);
+    const nm    = document.getElementById(d.n);
+    if(!sl||!nm) return;
+    let param  = d.sv(+sl.value);
+    let nmNum  = parseFloat(d.nmGet(param));
+    const useIntStep = (field==='M'||field==='m'||field==='D_o'||field==='D_b');
+    const step = useIntStep ? 1 : currentStep;
+    nmNum += dir * step;
+    const nmMin = parseFloat(nm.min), nmMax = parseFloat(nm.max);
+    nmNum = Math.max(nmMin, Math.min(nmMax, nmNum));
+    const newParam = d.nmSet(nmNum);
+    nm.value = d.nmGet(newParam);
+    sl.value = d.vs(newParam);
+    if(d.dv){const dv=document.getElementById(d.dv);if(dv)dv.textContent=d.fmt(newParam);}
+    if(field==='ef_mult') updateEfTag(newParam);
+    calculate();
+  });
+});
+
+loadStorage();
+calculate();
+window.addEventListener('resize', calculate);
+</script>
+</body>
+</html>

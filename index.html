@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHITE TIGER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<script src="script.js"></script>
+
+<aside>
+  <div class="sidebar-top">
+    <div class="tiger-bar"><span></span><span></span><span></span></div>
+    <div class="logo-row">
+      <div class="logo-img">
+        <img src="https://cdn-icons-png.flaticon.com/512/15057/15057719.png" alt="tiger" onerror="this.parentElement.innerHTML='🐯'">
+      </div>
+      <div>
+        <div class="sidebar-eyebrow">SBLS · White Tiger</div>
+        <div class="sidebar-title">Spring Launcher</div>
+      </div>
+    </div>
+    <div class="sidebar-sub"></div>
+  </div>
+  <div class="sidebar-body">
+
+    <div class="sec">
+      <div class="sec-label">Step size</div>
+      <div class="scale-buttons">
+        <button class="scale-btn" data-step="10">10</button>
+        <button class="scale-btn" data-step="1">1</button>
+        <button class="scale-btn" data-step="0.1">0.1</button>
+        <button class="scale-btn" data-step="0.01">0.01</button>
+        <button class="scale-btn" data-step="0.001">0.001</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec">
+      <div class="sec-label">Geometry</div>
+
+      <div class="field-row">
+        <div class="field-label">Target distance<small>d</small></div>
+        <div class="field-val" id="d-dv">5.00 m</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="d" data-dir="-1">−</button>
+        <input type="range" id="d-s" min="10" max="150" step="1" value="50">
+        <input type="number" class="num-in" id="d-n" min="1.0" max="15.0" step="0.1" value="5.00">
+        <button class="pm-btn" data-field="d" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Pivot height<small>h</small></div>
+        <div class="field-val" id="h-dv">1.00 m</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="h" data-dir="-1">−</button>
+        <input type="range" id="h-s" min="10" max="200" step="5" value="100">
+        <input type="number" class="num-in" id="h-n" min="0.10" max="2.00" step="0.05" value="1.00">
+        <button class="pm-btn" data-field="h" data-dir="1">+</button>
+      </div>
+
+
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec">
+      <div class="sec-label">Spring</div>
+
+      <div class="field-row">
+        <div class="field-label">Spring constant<small>k</small></div>
+        <div class="field-val" id="k-dv">800 N/m</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="k" data-dir="-1">−</button>
+        <input type="range" id="k-s" min="100" max="3000" step="50" value="800">
+        <input type="number" class="num-in" id="k-n" min="100" max="3000" step="50" value="800">
+        <button class="pm-btn" data-field="k" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Compression<small>x</small></div>
+        <div class="field-val" id="x-dv">0.08 m</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="x" data-dir="-1">−</button>
+        <input type="range" id="x-s" min="1" max="20" step="1" value="8">
+        <input type="number" class="num-in" id="x-n" min="0.01" max="0.20" step="0.01" value="0.08">
+        <button class="pm-btn" data-field="x" data-dir="1">+</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec">
+      <div class="sec-label">Collision</div>
+
+      <div class="field-row">
+        <div class="field-label">Plunger mass<small>M</small></div>
+        <div class="field-val" id="M-dv">300 g</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="M" data-dir="-1">−</button>
+        <input type="range" id="M-s" min="50" max="2000" step="10" value="300">
+        <input type="number" class="num-in" id="M-n" min="50" max="2000" step="10" value="300">
+        <button class="pm-btn" data-field="M" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Ball mass<small>m</small></div>
+        <div class="field-val" id="m-dv">24 g</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="m" data-dir="-1">−</button>
+        <input type="range" id="m-s" min="5" max="500" step="1" value="24">
+        <input type="number" class="num-in" id="m-n" min="5" max="500" step="1" value="24">
+        <button class="pm-btn" data-field="m" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Restitution<small>e</small></div>
+        <div class="field-val" id="e-dv">0.45</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="e" data-dir="-1">−</button>
+        <input type="range" id="e-s" min="0" max="100" step="5" value="45">
+        <input type="number" class="num-in" id="e-n" min="0.00" max="1.00" step="0.05" value="0.45">
+        <button class="pm-btn" data-field="e" data-dir="1">+</button>
+      </div>
+
+      <div class="field-row">
+        <div class="field-label">Band width (±%)<small>e_f symmetric</small></div>
+        <div class="field-val" id="e_f-dv">5.0%</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="e_f" data-dir="-1">−</button>
+        <input type="range" id="e_f-s" min="0" max="20" step="1" value="5">
+        <input type="number" class="num-in" id="e_f-n" min="0.0" max="20.0" step="0.5" value="5.0">
+        <button class="pm-btn" data-field="e_f" data-dir="1">+</button>
+      </div>
+
+      <div class="ef-row">
+        <div class="ef-label" style="display:flex;align-items:center;gap:6px">
+          Error factor
+          <span style="font-family:var(--mono);font-size:9px;color:var(--ink-light);background:var(--cream);padding:1px 5px;border-radius:3px">ef_mult</span>
+        </div>
+        <div id="ef_mult-tag" class="ef-tag zero">×1.00</div>
+      </div>
+      <div class="field-controls" style="align-items:center;gap:6px">
+        <button class="pm-btn" data-field="ef_mult" data-dir="-1">−</button>
+        <input type="range" id="ef_mult-s" min="-50" max="50" step="1" value="0" style="flex:1">
+        <input type="number" class="num-in" id="ef_mult-n" min="-2.00" max="2.00" step="0.05" value="0.00" style="width:68px">
+        <button class="pm-btn" data-field="ef_mult" data-dir="1">+</button>
+      </div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--ink-light);margin-bottom:10px;padding:0 2px">
+        ±คูณ error จากสภาพจริง: ลม / แรงเสียดทาน / bounce
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec">
+      <div class="sec-label">Constraints</div>
+
+      <div class="field-row">
+        <div class="field-label">Min descent angle ↓<small>ang_min</small></div>
+        <div class="field-val" id="ang_min-dv">30.0°</div>
+      </div>
+      <div class="field-controls">
+        <button class="pm-btn" data-field="ang_min" data-dir="-1">−</button>
+        <input type="range" id="ang_min-s" min="0" max="80" step="1" value="30">
+        <input type="number" class="num-in" id="ang_min-n" min="0" max="80" step="1" value="30.0">
+        <button class="pm-btn" data-field="ang_min" data-dir="1">+</button>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<main>
+  <div class="main-bar">
+    <span class="bar-title">Trajectory Analysis</span>
+    <div class="bar-status"><span class="dot"></span><span id="status-txt">Calculating…</span></div>
+    <div class="bar-answer">θ = <span id="calc-angle">--</span></div>
+  </div>
+
+  <div class="main-content">
+    <div class="cards-row" id="results-row"></div>
+    <div class="canvas-wrap">
+      <div class="canvas-topbar">
+        <span class="ctb-label">Trajectory</span>
+        <span class="leg"><span class="leg-line" style="background:#1a5fc4"></span>Nominal</span>
+        <span class="leg"><span class="leg-band" style="background:#1a5fc4;opacity:.2"></span>Band</span>
+        <span class="leg"><span class="leg-line" style="background:#c85a12;height:3px"></span>Shifted</span>
+        <span class="leg"><span class="leg-line" style="background:#c42020;height:4px"></span>Target</span>
+      </div>
+      <canvas id="traj"></canvas>
+    </div>
+  </div>
+</main>
+</div>
+
+</body>
+</html>

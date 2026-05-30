@@ -1,211 +1,542 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WHITE TIGER</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="White Tiger Projectile Calculator — Physics simulation tool for computing launch angles, trajectories, and timing parameters with interactive visualization.">
+  <meta name="author" content="White Tiger Engineering">
+  <title>WHITE TIGER · Projectile Calculator</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-<div class="app">
-<script src="script.js"></script>
+  <div class="app">
 
-<aside>
-  <div class="sidebar-top">
-    <div class="tiger-bar"><span></span><span></span><span></span></div>
-    <div class="logo-row">
-      <div class="logo-img">
-        <img src="https://cdn-icons-png.flaticon.com/512/15057/15057719.png" alt="tiger" onerror="this.parentElement.innerHTML='🐯'">
-      </div>
-      <div>
-        <div class="sidebar-eyebrow">SBLS · White Tiger</div>
-        <div class="sidebar-title">Spring Launcher</div>
-      </div>
-    </div>
-    <div class="sidebar-sub"></div>
-  </div>
-  <div class="sidebar-body">
+    <!-- ═══════ LEFT PANEL — Parameters ═══════ -->
+    <aside class="panel-left" id="panel-left">
 
-    <div class="sec">
-      <div class="sec-label">Step size</div>
-      <div class="scale-buttons">
-        <button class="scale-btn" data-step="10">10</button>
-        <button class="scale-btn" data-step="1">1</button>
-        <button class="scale-btn" data-step="0.1">0.1</button>
-        <button class="scale-btn" data-step="0.01">0.01</button>
-        <button class="scale-btn" data-step="0.001">0.001</button>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="sec">
-      <div class="sec-label">Geometry</div>
-
-      <div class="field-row">
-        <div class="field-label">Target distance<small>d</small></div>
-        <div class="field-val" id="d-dv">5.00 m</div>
-      </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="d" data-dir="-1">−</button>
-        <input type="range" id="d-s" min="10" max="150" step="1" value="50">
-        <input type="number" class="num-in" id="d-n" min="1.0" max="15.0" step="0.1" value="5.00">
-        <button class="pm-btn" data-field="d" data-dir="1">+</button>
-      </div>
-
-      <div class="field-row">
-        <div class="field-label">Pivot height<small>h</small></div>
-        <div class="field-val" id="h-dv">1.00 m</div>
-      </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="h" data-dir="-1">−</button>
-        <input type="range" id="h-s" min="10" max="200" step="5" value="100">
-        <input type="number" class="num-in" id="h-n" min="0.10" max="2.00" step="0.05" value="1.00">
-        <button class="pm-btn" data-field="h" data-dir="1">+</button>
-      </div>
-
-
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="sec">
-      <div class="sec-label">Spring</div>
-
-      <div class="field-row">
-        <div class="field-label">Spring constant<small>k</small></div>
-        <div class="field-val" id="k-dv">800 N/m</div>
-      </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="k" data-dir="-1">−</button>
-        <input type="range" id="k-s" min="100" max="3000" step="50" value="800">
-        <input type="number" class="num-in" id="k-n" min="100" max="3000" step="50" value="800">
-        <button class="pm-btn" data-field="k" data-dir="1">+</button>
-      </div>
-
-      <div class="field-row">
-        <div class="field-label">Compression<small>x</small></div>
-        <div class="field-val" id="x-dv">0.08 m</div>
-      </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="x" data-dir="-1">−</button>
-        <input type="range" id="x-s" min="1" max="20" step="1" value="8">
-        <input type="number" class="num-in" id="x-n" min="0.01" max="0.20" step="0.01" value="0.08">
-        <button class="pm-btn" data-field="x" data-dir="1">+</button>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="sec">
-      <div class="sec-label">Collision</div>
-
-      <div class="field-row">
-        <div class="field-label">Plunger mass<small>M</small></div>
-        <div class="field-val" id="M-dv">300 g</div>
-      </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="M" data-dir="-1">−</button>
-        <input type="range" id="M-s" min="50" max="2000" step="10" value="300">
-        <input type="number" class="num-in" id="M-n" min="50" max="2000" step="10" value="300">
-        <button class="pm-btn" data-field="M" data-dir="1">+</button>
-      </div>
-
-      <div class="field-row">
-        <div class="field-label">Ball mass<small>m</small></div>
-        <div class="field-val" id="m-dv">24 g</div>
-      </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="m" data-dir="-1">−</button>
-        <input type="range" id="m-s" min="5" max="500" step="1" value="24">
-        <input type="number" class="num-in" id="m-n" min="5" max="500" step="1" value="24">
-        <button class="pm-btn" data-field="m" data-dir="1">+</button>
-      </div>
-
-      <div class="field-row">
-        <div class="field-label">Restitution<small>e</small></div>
-        <div class="field-val" id="e-dv">0.45</div>
-      </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="e" data-dir="-1">−</button>
-        <input type="range" id="e-s" min="0" max="100" step="5" value="45">
-        <input type="number" class="num-in" id="e-n" min="0.00" max="1.00" step="0.05" value="0.45">
-        <button class="pm-btn" data-field="e" data-dir="1">+</button>
-      </div>
-
-      <div class="field-row">
-        <div class="field-label">Band width (±%)<small>e_f symmetric</small></div>
-        <div class="field-val" id="e_f-dv">5.0%</div>
-      </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="e_f" data-dir="-1">−</button>
-        <input type="range" id="e_f-s" min="0" max="20" step="1" value="5">
-        <input type="number" class="num-in" id="e_f-n" min="0.0" max="20.0" step="0.5" value="5.0">
-        <button class="pm-btn" data-field="e_f" data-dir="1">+</button>
-      </div>
-
-      <div class="ef-row">
-        <div class="ef-label" style="display:flex;align-items:center;gap:6px">
-          Error factor
-          <span style="font-family:var(--mono);font-size:9px;color:var(--ink-light);background:var(--cream);padding:1px 5px;border-radius:3px">ef_mult</span>
+      <!-- Brand Header -->
+      <div class="brand-header">
+        <div class="brand-logo" aria-label="White Tiger logo">
+          <img src="https://cdn-icons-png.flaticon.com/512/15057/15057719.png" alt="" draggable="false">
         </div>
-        <div id="ef_mult-tag" class="ef-tag zero">×1.00</div>
+        <div class="brand-text">
+          <div class="brand-eyebrow">WHITE TIGER</div>
+          <div class="brand-name">Projectile Solver</div>
+        </div>
+        <div class="brand-version">v6.0</div>
       </div>
-      <div class="field-controls" style="align-items:center;gap:6px">
-        <button class="pm-btn" data-field="ef_mult" data-dir="-1">−</button>
-        <input type="range" id="ef_mult-s" min="-50" max="50" step="1" value="0" style="flex:1">
-        <input type="number" class="num-in" id="ef_mult-n" min="-2.00" max="2.00" step="0.05" value="0.00" style="width:68px">
-        <button class="pm-btn" data-field="ef_mult" data-dir="1">+</button>
-      </div>
-      <div style="font-family:var(--mono);font-size:9px;color:var(--ink-light);margin-bottom:10px;padding:0 2px">
-        ±คูณ error จากสภาพจริง: ลม / แรงเสียดทาน / bounce
-      </div>
-    </div>
 
-    <div class="divider"></div>
+      <!-- Scrollable parameter area -->
+      <div class="param-scroll">
+        <!-- ── Section 0: Target Calculator (instant) ── -->
+        <div class="pgroup" id="pgroup-target-calc">
+          <div class="pgroup-header">
+            <div class="pgroup-header-left">
+              <svg class="pgroup-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                  opacity="0.4" />
+                <circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.3" />
+                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.2" />
+                <circle cx="8" cy="8" r="0.8" fill="currentColor" />
+              </svg>
+              <span class="pgroup-label">Target Calculator</span>
+            </div>
+            <span class="pgroup-badge badge--target">CALC</span>
+          </div>
 
-    <div class="sec">
-      <div class="sec-label">Constraints</div>
+          <div class="prow" id="field-y-measure">
+            <span class="prow-dirty-dot"></span>
+            <div class="prow-left">
+              <div class="prow-sym-wrap prow-sym-wrap--target">
+                <span class="prow-sym">y</span>
+              </div>
+              <div class="prow-meta">
+                <span class="prow-name">ระยะวัดเป้า</span>
+                <span class="prow-sub">Measured distance</span>
+              </div>
+            </div>
+            <div class="prow-right">
+              <input class="prow-input num-in" id="in-y-measure" type="number" value="80" step="0.5"
+                aria-label="Measured distance y">
+              <span class="prow-unit">cm</span>
+            </div>
+          </div>
 
-      <div class="field-row">
-        <div class="field-label">Min descent angle ↓<small>ang_min</small></div>
-        <div class="field-val" id="ang_min-dv">30.0°</div>
+        </div>
+
+        <!-- ── Section 1: Setup Parameters ── -->
+        <div class="pgroup" id="pgroup-projectile">
+          <div class="pgroup-header">
+            <div class="pgroup-header-left">
+              <svg class="pgroup-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" />
+                <line x1="8" y1="1" x2="8" y2="4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <line x1="8" y1="12" x2="8" y2="15" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <line x1="1" y1="8" x2="4" y2="8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <line x1="12" y1="8" x2="15" y2="8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <circle cx="8" cy="8" r="1.5" fill="currentColor" />
+              </svg>
+              <span class="pgroup-label">Setup Parameters</span>
+            </div>
+            <span class="pgroup-badge badge--physics">PHYSICS</span>
+          </div>
+
+          <div class="prow" id="field-sx">
+            <span class="prow-dirty-dot"></span>
+            <div class="prow-left">
+              <div class="prow-sym-wrap">
+                <span class="prow-sym">s<sub class="prow-sym-sub">x</sub></span>
+              </div>
+              <div class="prow-meta">
+                <span class="prow-name">ระยะเป้าหมาย</span>
+                <span class="prow-sub">Target distance</span>
+              </div>
+            </div>
+            <div class="prow-right">
+              <input class="prow-input num-in" id="in-sx" type="number" value="163.5" step="0.1"
+                aria-label="Target distance sx">
+              <span class="prow-unit">cm</span>
+            </div>
+          </div>
+
+          <div class="range-warn" id="range-warn">
+            <svg class="range-warn-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1L13 12H1L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" />
+              <path d="M7 5.5V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <circle cx="7" cy="10" r=".7" fill="currentColor" />
+            </svg>
+            <span>ไม่มีคำตอบในช่วง 46°–73°</span>
+          </div>
+        </div>
+
+        <!-- ── Section 2: Timing & Arm Setup ── -->
+        <div class="pgroup" id="pgroup-timing">
+          <div class="pgroup-header">
+            <div class="pgroup-header-left">
+              <svg class="pgroup-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="9" r="6" stroke="currentColor" stroke-width="1.3" />
+                <line x1="8" y1="9" x2="8" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="8" y1="9" x2="10.5" y2="9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <line x1="6" y1="2" x2="10" y2="2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <line x1="8" y1="2" x2="8" y2="3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              </svg>
+              <span class="pgroup-label">Timing & Arm Setup</span>
+            </div>
+            <span class="pgroup-badge badge--timing">TIMING</span>
+          </div>
+
+          <div class="prow" id="field-trig-angle">
+            <span class="prow-dirty-dot"></span>
+            <div class="prow-left">
+              <div class="prow-sym-wrap prow-sym-wrap--timing">
+                <span class="prow-sym">θ<sub class="prow-sym-sub">trig</sub></span>
+              </div>
+              <div class="prow-meta">
+                <span class="prow-name">มุมเซ็นเซอร์</span>
+                <span class="prow-sub">Trigger angle</span>
+              </div>
+            </div>
+            <div class="prow-right">
+              <input class="prow-input num-in" id="in-trig-angle" type="number" value="180" step="1">
+              <span class="prow-unit">°</span>
+            </div>
+          </div>
+
+          <div class="prow" id="field-rpm">
+            <span class="prow-dirty-dot"></span>
+            <div class="prow-left">
+              <div class="prow-sym-wrap prow-sym-wrap--timing">
+                <span class="prow-sym">ω</span>
+              </div>
+              <div class="prow-meta">
+                <span class="prow-name">ความเร็วรอบ</span>
+                <span class="prow-sub">Arm RPM</span>
+              </div>
+            </div>
+            <div class="prow-right">
+              <input class="prow-input num-in" id="in-rpm" type="number" value="10" step="1">
+              <span class="prow-unit">RPM</span>
+            </div>
+          </div>
+
+          <div class="prow" id="field-n">
+            <span class="prow-dirty-dot"></span>
+            <div class="prow-left">
+              <div class="prow-sym-wrap prow-sym-wrap--timing">
+                <span class="prow-sym">n</span>
+              </div>
+              <div class="prow-meta">
+                <span class="prow-name">รอบการหมุน</span>
+                <span class="prow-sub">Rotations</span>
+              </div>
+            </div>
+            <div class="prow-right">
+              <input class="prow-input num-in" id="in-n" type="number" value="0" step="1" min="0">
+              <span class="prow-unit">รอบ</span>
+            </div>
+          </div>
+
+          <!-- Hidden: auto-calculated delay -->
+          <input type="hidden" id="in-t-delay" value="0.000">
+        </div>
+
+        <!-- ── Section 3: Design Constants (Read-Only) ── -->
+        <div class="pgroup pgroup--const" id="pgroup-const">
+          <div class="pgroup-header">
+            <div class="pgroup-header-left">
+              <svg class="pgroup-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="7" width="10" height="7" rx="2" stroke="currentColor" stroke-width="1.3" />
+                <path d="M5 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <circle cx="8" cy="11" r="1" fill="currentColor" />
+              </svg>
+              <span class="pgroup-label">Design Constants</span>
+            </div>
+            <span class="pgroup-badge badge--const">READ-ONLY</span>
+          </div>
+
+          <div class="const-grid">
+            <div class="const-card">
+              <div class="cc-icon">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M7 2v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  <path d="M4 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  <circle cx="7" cy="2" r="1" fill="currentColor" />
+                </svg>
+              </div>
+              <div class="cc-data">
+                <span class="cc-label">แรงโน้มถ่วง</span>
+                <span class="cc-value">g = 9.81 m/s²</span>
+              </div>
+            </div>
+            <div class="const-card">
+              <div class="cc-icon">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <rect x="2" y="6" width="10" height="6" rx="1" stroke="currentColor" stroke-width="1.2" />
+                  <path d="M5 6V4a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.2" />
+                </svg>
+              </div>
+              <div class="cc-data">
+                <span class="cc-label">ความสูงเครื่องยิง</span>
+                <span class="cc-value">y₀ = 380 mm</span>
+              </div>
+            </div>
+            <div class="const-card">
+              <div class="cc-icon">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.2" />
+                  <circle cx="7" cy="7" r="1" fill="currentColor" />
+                  <line x1="7" y1="1" x2="7" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+                  <line x1="7" y1="11" x2="7" y2="13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+                </svg>
+              </div>
+              <div class="cc-data">
+                <span class="cc-label">ความสูงเป้าหมาย</span>
+                <span class="cc-value">yₜ = 430 mm</span>
+              </div>
+            </div>
+            <div class="const-card">
+              <div class="cc-icon">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M3 11 A6 6 0 0 1 11 11" stroke="currentColor" stroke-width="1.2" fill="none" />
+                  <line x1="7" y1="11" x2="9" y2="6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                  <circle cx="7" cy="11" r="1" fill="currentColor" />
+                </svg>
+              </div>
+              <div class="cc-data">
+                <span class="cc-label">ช่วงมุมที่ถูกต้อง</span>
+                <span class="cc-value">θ = 46°–73°</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /param-scroll -->
+
+      <!-- Action Buttons -->
+      <div class="panel-footer">
+        <button class="btn-calculate" id="btn-calc">
+          <svg class="btn-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <polygon points="3,1 13,7 3,13" fill="currentColor" />
+          </svg>
+          CALCULATE
+          <span class="btn-calc-badge" id="btn-calc-badge">CHANGED</span>
+        </button>
+        <button class="btn-reset" id="btn-reset" title="Reset to defaults" aria-label="Reset all parameters">
+          <svg class="btn-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7A5 5 0 1 1 7 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <polyline points="2,4 2,7 5,7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          RESET
+        </button>
       </div>
-      <div class="field-controls">
-        <button class="pm-btn" data-field="ang_min" data-dir="-1">−</button>
-        <input type="range" id="ang_min-s" min="0" max="80" step="1" value="30">
-        <input type="number" class="num-in" id="ang_min-n" min="0" max="80" step="1" value="30.0">
-        <button class="pm-btn" data-field="ang_min" data-dir="1">+</button>
+
+      <!-- Mobile toggle -->
+      <button class="mobile-panel-toggle" id="mobile-toggle" aria-label="Toggle parameters">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
+    </aside>
+
+    <!-- ═══════ CENTER — Main workspace ═══════ -->
+    <main class="workspace" id="workspace">
+
+      <!-- Workspace header bar -->
+      <div class="workspace-bar">
+        <div class="wb-left">
+          <h1 class="wb-title">Trajectory Analysis</h1>
+          <div class="wb-status">
+            <div class="status-dot" id="status-dot"></div>
+            <span id="status-txt">Ready — กรอกค่าแล้วกด CALCULATE</span>
+          </div>
+        </div>
+        <div class="workspace-bar-actions">
+          <div class="wb-angle-readout" id="bar-angle-widget" style="display:none">
+            <span style="font-family:var(--mono);font-size:12px;color:var(--ink-3);font-weight:500">θ =</span>
+            <span style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);letter-spacing:-.02em" id="baw-val">--</span>
+            <span style="font-family:var(--mono);font-size:14px;color:var(--ink-3)">°</span>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <!-- Canvas zone -->
+      <div class="canvas-zone">
+
+        <!-- Empty state overlay -->
+        <div class="state-idle" id="empty-state">
+          <div class="idle-graphic">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+              <circle cx="36" cy="36" r="34" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4"
+                opacity="0.12" />
+              <path d="M14 54 Q28 14 58 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"
+                opacity="0.2" />
+              <circle cx="58" cy="24" r="4.5" fill="currentColor" opacity="0.15" />
+              <circle cx="14" cy="54" r="4.5" fill="currentColor" opacity="0.15" />
+              <path d="M14 54 L21 47" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.12" />
+            </svg>
+          </div>
+          <div class="idle-text">
+            <div class="idle-title">No Simulation Data</div>
+            <div class="idle-hint">กรอกค่า s<sub>x</sub> จากนั้นกดปุ่ม <kbd>CALCULATE</kbd> เพื่อเริ่มจำลองวิถีกระสุน
+            </div>
+          </div>
+        </div>
+
+        <!-- No-solution overlay -->
+        <div class="state-error" id="no-sol-wrap" style="display:none">
+          <div class="error-card">
+            <div class="error-icon-wrap">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5" />
+                <path d="M10 6v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                <circle cx="10" cy="14" r="1" fill="currentColor" />
+              </svg>
+            </div>
+            <div class="error-body">
+              <div class="error-title">No Solution in Range 46°–73°</div>
+              <div class="error-desc">ลองตรวจสอบระยะเป้าหมาย · มุมอาจเกินช่วงที่กำหนดหรือเป้าหมายไกลเกินไป</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Graph area -->
+        <div class="graph-area" id="graph-wrap" style="display:none">
+          <div class="canvas-header">
+            <span class="ch-label">TRAJECTORY</span>
+            <div class="ch-legend" id="legend-row"></div>
+          </div>
+          <canvas id="traj"></canvas>
+        </div>
+
+      </div>
+
+      <!-- Metrics strip -->
+      <div class="metrics-bar" id="metrics-bar" style="display:none">
+        <div class="metric-item">
+          <span class="metric-label">BALL V₀</span>
+          <span class="metric-value" id="met-v0">--</span>
+          <span class="metric-unit">m/s</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">AIR TIME</span>
+          <span class="metric-value" id="met-tof">--</span>
+          <span class="metric-unit">s</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">PEAK H</span>
+          <span class="metric-value" id="met-peak">--</span>
+          <span class="metric-unit">m</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">DESCENT</span>
+          <span class="metric-value" id="met-descent">--</span>
+          <span class="metric-unit">°</span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ═══════ RIGHT PANEL — Results ═══════ -->
+    <aside class="panel-right" id="panel-right">
+
+      <!-- Card 1: Primary Result — Launch Angle -->
+      <div class="result-card result-primary" id="result-primary">
+        <div class="rc-header">
+          <div class="rc-header-left">
+            <div class="rc-icon rc-icon--angle">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M3 15h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M3 15L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M3 15 A5 5 0 0 0 7.5 12.5" stroke="currentColor" stroke-width="1.3" fill="none" />
+              </svg>
+            </div>
+            <div class="rc-titles">
+              <span class="rc-badge">PRIMARY RESULT</span>
+              <span class="rc-title">Launch Angle</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-idle" id="rp-idle">
+          <div class="rp-idle-icon">θ</div>
+          <div class="rp-idle-text">กด Calculate เพื่อคำนวณ</div>
+        </div>
+
+        <div class="rp-solved" id="rp-solved" style="display:none">
+          <div class="rp-angle-display">
+            <span class="rp-angle-val" id="rp-angle-val">--</span>
+            <span class="rp-angle-unit">°</span>
+          </div>
+          <div class="rp-label-row">
+            <span class="rp-label-tag">High Arc</span>
+            <span class="rp-label-sub">มุมยิงที่คำนวณได้</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Timing Data -->
+      <div class="result-card result-timing" id="result-timing">
+        <div class="rc-header">
+          <div class="rc-header-left">
+            <div class="rc-icon rc-icon--timing">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <circle cx="9" cy="10" r="6.5" stroke="currentColor" stroke-width="1.3" />
+                <line x1="9" y1="10" x2="9" y2="6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="9" y1="10" x2="12" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                <line x1="7" y1="2.5" x2="11" y2="2.5" stroke="currentColor" stroke-width="1.3"
+                  stroke-linecap="round" />
+              </svg>
+            </div>
+            <div class="rc-titles">
+              <span class="rc-badge rc-badge--timing">TIMING DATA</span>
+              <span class="rc-title">Delay Time</span>
+            </div>
+          </div>
+          <span class="rt-status-badge" id="rt-badge">—</span>
+        </div>
+
+        <div id="rt-idle" class="rt-idle">
+          <span class="rt-idle-msg">— คำนวณมุมก่อน —</span>
+        </div>
+
+        <div id="rt-solved" style="display:none">
+          <div class="rt-delay-card" id="rt-delay-card">
+            <div class="rtd-label">Delay Time (t)</div>
+            <div class="rtd-value"><span id="rt-delay-val">--</span><span class="rtd-unit">s</span></div>
+          </div>
+        </div>
+
+        <div id="rt-error" style="display:none" class="rt-error-msg"></div>
+      </div>
+
+      <!-- Card 3: Electrical System Data -->
+      <div class="result-card result-electrical" id="result-electrical">
+        <div class="rc-header">
+          <div class="rc-header-left">
+            <div class="rc-icon rc-icon--elec">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M10 2L6 10h5l-3 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="rc-titles">
+              <span class="rc-badge rc-badge--elec">ELECTRICAL</span>
+              <span class="rc-title">System Data</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="elec-idle" class="rt-idle">
+          <span class="rt-idle-msg">— รอผลจาก Timing —</span>
+        </div>
+
+        <div id="elec-solved" style="display:none">
+          <div class="elec-grid">
+            <div class="elec-item">
+              <div class="elec-item-header">
+                <svg class="elec-item-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M3 7h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                  <path d="M5 4v6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                  <path d="M9 4v6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                </svg>
+                <span class="elec-item-label">Resistance (R)</span>
+              </div>
+              <div class="elec-item-value" id="rt-r-val">-- <span class="elec-item-unit">kΩ</span></div>
+            </div>
+            <div class="elec-item">
+              <div class="elec-item-header">
+                <svg class="elec-item-icon" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M7 2L4 8h5l-2 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+                <span class="elec-item-label">Voltage (V)</span>
+              </div>
+              <div class="elec-item-value" id="rt-v-val">-- <span class="elec-item-unit">V</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: History / Presets -->
+      <div class="result-card history-card" id="history-section">
+        <div class="rc-header" style="margin-bottom: var(--sp-3);">
+          <div class="rc-header-left">
+            <div class="rc-icon rc-icon--history">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 2.5a5.5 5.5 0 105.5 5.5H12M8 5v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="rc-titles">
+              <span class="rc-badge rc-badge--history">SAVED PRESETS</span>
+              <span class="rc-title">History</span>
+            </div>
+          </div>
+        </div>
+        <div id="history-list" class="history-list">
+          <div class="history-empty">ไม่มีประวัติการบันทึก</div>
+        </div>
+      </div>
+
+    </aside>
 
   </div>
-</aside>
 
-<main>
-  <div class="main-bar">
-    <span class="bar-title">Trajectory Analysis</span>
-    <div class="bar-status"><span class="dot"></span><span id="status-txt">Calculating…</span></div>
-    <div class="bar-answer">θ = <span id="calc-angle">--</span></div>
+  <div class="toast" id="reset-toast">
+    <svg width="14" height="14" viewBox="0 0 14 14">
+      <polyline points="2,7 5.5,10.5 12,4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" fill="none" />
+    </svg>
+    คืนค่าเริ่มต้นเรียบร้อย
   </div>
 
-  <div class="main-content">
-    <div class="cards-row" id="results-row"></div>
-    <div class="canvas-wrap">
-      <div class="canvas-topbar">
-        <span class="ctb-label">Trajectory</span>
-        <span class="leg"><span class="leg-line" style="background:#1a5fc4"></span>Nominal</span>
-        <span class="leg"><span class="leg-band" style="background:#1a5fc4;opacity:.2"></span>Band</span>
-        <span class="leg"><span class="leg-line" style="background:#c85a12;height:3px"></span>Shifted</span>
-        <span class="leg"><span class="leg-line" style="background:#c42020;height:4px"></span>Target</span>
-      </div>
-      <canvas id="traj"></canvas>
-    </div>
-  </div>
-</main>
-</div>
-
+  <script src="main.js"></script>
 </body>
+
 </html>

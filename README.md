@@ -1,78 +1,89 @@
-# WHITE TIGER · Projectile Calculator
+<div align="center">
+  <img src="https://cdn-icons-png.flaticon.com/512/15057/15057719.png" width="80" alt="White Tiger Logo">
 
-เครื่องมือจำลองวิถีกระสุนแบบ Interactive สำหรับคำนวณมุมยิง, เวลาหน่วง (Delay Time) และค่าทางไฟฟ้าที่เกี่ยวข้อง พร้อมแสดงผลกราฟวิถีกระสุนแบบ Real-time บน Canvas 2D
+  # 🐾 WHITE TIGER · Projectile Solver
+  
+  **Interactive Projectile Trajectory Calculator & Physics Simulation** <br>
+  *Clean UI • Real-time Canvas Graph • Engineering Grade*
+  
+  ![Version](https://img.shields.io/badge/version-6.0-orange?style=flat-square)
+  ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+  ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+  ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+
+</div>
+
+<br>
+
+<!-- 🚨 แนบรูปภาพตัวอย่าง UI ตรงนี้ 🚨 -->
+![White Tiger Interface Preview](preview.png)
+*(กรุณาบันทึกรูปที่คุณแคปไว้ในชื่อ `preview.png` แล้วอัพโหลดขึ้น GitHub ของคุณเพื่อให้รูปโชว์ตรงนี้นะครับ!)*
 
 ---
 
-## รายละเอียดโปรเจกต์ (Description)
+## 🎯 รายละเอียดโปรเจกต์ (Description)
 
-**WHITE TIGER Projectile Calculator** เป็นเว็บแอปพลิเคชันที่ออกแบบมาเพื่อช่วยในการคำนวณพารามิเตอร์ของเครื่องยิงกระสุน (Projectile Launcher) โดยมีความสามารถหลัก ดังนี้
+**WHITE TIGER Projectile Calculator** เป็นเว็บแอปพลิเคชันหน้าตาทันสมัยระดับมืออาชีพ ที่ออกแบบมาเพื่อช่วยวิศวกรและนักพัฒนาในการคำนวณพารามิเตอร์ของ **เครื่องยิงกระสุน (Projectile Launcher)** 
 
-- **คำนวณมุมยิง (Launch Angle)** — ใช้สมการเชิงประจักษ์ (Empirical Quadratic) เพื่อหามุมที่เหมาะสมจากระยะเป้าหมาย
-- **คำนวณเวลาหน่วง (Delay Time)** — คำนวณจากมุมเซ็นเซอร์, ความเร็วรอบ (RPM) และจำนวนรอบการหมุน
-- **คำนวณค่าทางไฟฟ้า** — หาค่าความต้านทาน (R) และแรงดันไฟฟ้า (V) ที่ต้องการ
-- **กราฟวิถีกระสุน (Trajectory Graph)** — แสดงวิถีกระสุนแบบ Interactive บน Canvas 2D พร้อมตำแหน่งเป้าหมาย
-- **ระบบ Preset History** — บันทึกและโหลดค่าที่เคยคำนวณไว้ผ่าน LocalStorage
+### ✨ จุดเด่น (Key Features)
+
+*   📐 **Launch Angle Solver**: หาระยะมุมยิงแบบ (High Arc) อัตโนมัติจากสมการ Quadratic ภายในช่วง 46°–73°
+*   📈 **Real-time Trajectory Graph**: พล็อตกราฟวิถีกระสุนสดๆ บน HTML5 Canvas พร้อม **Trajectory Band** (แถบสีฟ้าแสดงระยะเผื่อการกระจาย)
+*   ⏱️ **Timing & Arm Setup**: คำนวณเวลาหน่วง (Delay Time) สัมพันธ์กับรอบมอเตอร์ (RPM)
+*   ⚡ **Electrical Data**: คำนวณค่า R (Resistance) และ V (Voltage) ให้พร้อมใช้งานสำหรับวงจร
+*   💾 **Preset History**: ระบบบันทึกประวัติการคำนวณ (ใช้ LocalStorage)
+*   🔄 **Dirty Tracking UI**: ตรวจจับและแจ้งเตือนทันทีเมื่อค่า Input เปลี่ยนแปลง (ปุ่ม Calculate กระพริบเตือน)
 
 ---
 
-## โครงสร้างไฟล์ (Project Structure)
+## 🚀 เริ่มต้นใช้งาน (Quick Start)
 
+โปรเจกต์นี้ทำงานด้วย **Vanilla JS (No Framework)** ไม่จำเป็นต้องลง npm หรือ build tool ใดๆ ทั้งสิ้น:
+
+1. โคลนโปรเจกต์นี้ หรือดาวน์โหลดเป็นไฟล์ ZIP
+   ```bash
+   git clone https://github.com/guynattakorn/white_tiger.git
+   ```
+2. ดับเบิลคลิกเปิดไฟล์ `index.html` บนเบราว์เซอร์ (แนะนำ Chrome, Edge หรือ Safari รุ่นล่าสุด)
+3. หรือใช้ **Live Server** Extension บน VS Code เพื่อประสบการณ์ที่ดีที่สุด
+
+---
+
+## 🏗️ สถาปัตยกรรม (Architecture Flow)
+
+การเขียนโค้ดถูกออกแบบภายใต้หลักการ Clean OOP แยกโมดูลกันอย่างชัดเจนตามไดอะแกรมด้านล่างนี้:
+
+```mermaid
+graph TD
+    UI[Input Controller] -->|Event| SIM(Simulation App)
+    SIM -->|Calculate| PHYS[Physics Engine]
+    SIM -->|Calculate| TIME[Timing Engine]
+    
+    PHYS -->|Trajectory Data| CANV[Canvas Renderer]
+    PHYS -->|Metrics| UIR[UI Renderer]
+    TIME -->|Electrical Data| UIR
+    
+    SIM -->|Save State| HIST[(History Storage)]
+    
+    style SIM fill:#fef5f1,stroke:#e85d2a,stroke-width:2px,color:#e85d2a
+    style PHYS fill:#eff6ff,stroke:#3b82f6,stroke-width:2px
+    style TIME fill:#f0fdf4,stroke:#22c55e,stroke-width:2px
 ```
-M3.1/
-├── index.html    # โครงสร้าง HTML หลัก (UI Layout 3 คอลัมน์)
-├── styles.css    # ระบบออกแบบ CSS (CSS Variables, Responsive, Animation)
-├── main.js       # ลอจิกทั้งหมด (Physics, Timing, Canvas, UI Controller)
-└── README.md     # เอกสารอธิบายโปรเจกต์
-```
 
 ---
 
-## ฟีเจอร์หลัก (Features)
+## 🔧 พารามิเตอร์ระบบ (Constants)
 
-| ฟีเจอร์ | รายละเอียด |
-| --- | --- |
-| **Target Calculator** | กรอกระยะวัดเป้า (y) แล้วระยะเป้าหมาย (sₓ) จะคำนวณอัตโนมัติ |
-| **Launch Angle Solver** | แก้สมการกำลังสองหามุมยิง (High Arc) ในช่วง 46°–73° |
-| **Trajectory Graph** | แสดงวิถีกระสุนบน Canvas 2D พร้อมเส้นอ้างอิงความสูง |
-| **Angle Adjuster** | ปรับมุมด้วยปุ่ม +/− แล้วกราฟอัปเดตแบบ Real-time |
-| **Delay Time Calculator** | คำนวณเวลาหน่วงจากมุมเซ็นเซอร์, RPM และจำนวนรอบ |
-| **Electrical Data** | คำนวณค่า Resistance (kΩ) และ Voltage (V) |
-| **Dirty Tracking** | ระบบตรวจจับการเปลี่ยนแปลงค่า พร้อมแจ้งเตือนให้กด CALCULATE |
-| **Preset History** | บันทึกค่าอัตโนมัติ สูงสุด 10 รายการ เรียกใช้ซ้ำได้ |
-| **Responsive Design** | รองรับหน้าจอทุกขนาด ตั้งแต่ Desktop ถึง Mobile |
+| ตัวแปร (Variable) | ค่าที่ตั้งไว้ | คำอธิบาย |
+| :--- | :---: | :--- |
+| **Gravity (`g`)** | `9.81 m/s²` | ค่าแรงโน้มถ่วงมาตรฐาน |
+| **Launch Height (`y₀`)** | `380 mm` | จุดปล่อยลูกกระสุนจากพื้น |
+| **Target Height (`yₜ`)** | `430 mm` | ตำแหน่งรับกระสุนเป้าหมาย |
+| **Angle Range (`θ`)** | `46°–73°` | ขอบเขตมุมที่อนุญาตให้ยิงได้ |
 
 ---
 
-## ค่าคงที่ในระบบ (Design Constants)
-
-| พารามิเตอร์ | ค่า | หมายเหตุ |
-| --- | --- | --- |
-| แรงโน้มถ่วง (g) | 9.81 m/s² | ค่ามาตรฐาน |
-| ความสูงเครื่องยิง (y₀) | 380 mm | จุดปล่อยกระสุน |
-| ความสูงเป้าหมาย (yₜ) | 430 mm | ตำแหน่งเป้า |
-| ช่วงมุมที่ถูกต้อง (θ) | 46°–73° | ขอบเขตการคำนวณ |
-
----
-
-## สถาปัตยกรรมระบบ (Architecture)
-
-โปรเจกต์ใช้สถาปัตยกรรมแบบ **OOP (Object-Oriented Programming)** โดยแบ่งเป็นโมดูลอิสระ:
-
-```
-User Input
-  → InputController (จัดการ Input ทั้งหมด)
-  → PhysicsEngine (คำนวณมุมยิง)
-  → AngleController (จัดการสถานะมุม)
-  → CanvasRenderer (วาดกราฟ)
-  → UIRenderer (อัปเดต DOM)
-  → TimingController → TimingEngine (คำนวณเวลาหน่วง)
-  → HistoryController (จัดการประวัติ)
-```
----
-
-## หมายเหตุ (Notes)
-
-- สมการที่ใช้ในการคำนวณเป็นสมการเชิงประจักษ์ (Empirical) ที่ได้จากการทดสอบจริง
-- ข้อมูลประวัติจัดเก็บใน `localStorage` ของเบราว์เซอร์ ไม่มีการส่งข้อมูลไปยัง Server
-- โปรเจกต์นี้เป็น **Static Web Application** ไม่ต้องใช้ Backend หรือ Database
+<div align="center">
+  <br>
+  <i>Developed with ❤️ for the White Tiger Project</i>
+</div>

@@ -84,5 +84,5 @@ graph TD
 
 <div align="center">
   <br>
-  <i>Developed with ❤️ for the White Tiger Project</i>
+  <i>Developed with ❤️, Antigravity, and Claude Code for the White Tiger Project</i>
 </div>

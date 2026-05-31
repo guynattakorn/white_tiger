@@ -894,11 +894,9 @@ class TimingController {
     const rpm = parseFloat(document.getElementById('in-rpm')?.value) || 10;
     const n = parseFloat(document.getElementById('in-n')?.value) || 0;
 
-    const rad = (360 - trig) * Math.PI / 180;
-    const denom = (rpm * Math.PI) / 30;
     let t_delay = 0;
-    if (denom !== 0) {
-      t_delay = (rad + (2 * n * Math.PI)) / denom - (0.0098 * theta + 0.329);
+    if (rpm !== 0) {
+      t_delay = (30 / rpm) * (trig / 180 + 2 * n) - (0.00954 * theta + 0.335);
     }
 
     const res = this._engine.compute(t_delay);
